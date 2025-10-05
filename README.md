@@ -1,103 +1,102 @@
-kcap - Kubernetes Capacity and Resource Analyzer 🚀
-kcap is a command-line tool designed to analyze Kubernetes cluster resource utilization in real-time, providing insights and actionable recommendations for CPU and memory right-sizing at node, pod, and deployment levels.
+# kcap - Kubernetes Capacity & Resource Analyzer 🚀
 
-Features ⚙️
-Node summary: Displays allocatable, requested, and usage metrics of cluster nodes with health status and scale-in candidate identification.
+**kcap** is a CLI tool to analyze Kubernetes resource usage in real-time and provide actionable CPU/memory right-sizing recommendations for **nodes**, **pods**, and **deployments**.
 
-Pod summary: Shows pod-level CPU and memory requests vs usage, including waste percentages.
+---
 
-Deployment summary: Aggregates pod metrics by deployment to identify over-provisioned deployments.
+## Features
 
-Resource recommendations: Suggests nodes to drain (scale-in candidates) and pods for resource request reduction with configurable thresholds.
+* Node, Pod, and Deployment resource summaries
+* Resource right-sizing recommendations
+* Node scale-in candidate identification
+* JSON output for automation
+* Namespace filtering (`-n`)
+* Ignores DaemonSet pods by default
 
-JSON output: Machine-readable output for integration into automation pipelines.
+---
 
-Namespace filtering with shorthand -n flag similar to kubectl.
+## Installation
 
-Ignores DaemonSet pods by default to focus on user workloads.
-
-Installation 🛠️
-Build from source:
-```
+```bash
 go build -o kcap
 ```
 
-Ensure you have a working Kubernetes cluster with Metrics Server installed.
+**Prerequisites**: Kubernetes cluster with Metrics Server.
 
-Usage 📋
-Use --help for detailed flags for each command.
+---
 
-Nodes
-Show node resource summary and status:
-```
+## Usage
+
+### Nodes
+
+```bash
 kcap nodes [-n <namespace>] [--kubeconfig <path>] [--json]
 ```
-Note: Nodes are cluster-wide; namespace flag filters pods for usage computations.
 
-Pods
-Show pod CPU/memory requests vs usage with waste %:
-```
+### Pods
+
+```bash
 kcap pods -n <namespace> [--kubeconfig <path>] [--json]
 ```
 
-Deployments
-Aggregated deployment resource usage and waste summary:
-```
+### Deployments
+
+```bash
 kcap deploys -n <namespace> [--kubeconfig <path>] [--json]
 ```
-Recommendations
-Suggest resource right-sizing and node scale-in candidates. Customize threshold:
-```
-kcap recommend -n <namespace> [--kubeconfig <path>] [--json] [--threshold <waste_percentage>]
-```
-Default threshold is 80%.
 
-Report
-Comprehensive cluster or namespace-level summary report:
-```
-kcap report -n <namespace> [--kubeconfig <path>] [--json] [--threshold <waste_percentage>]
+### Recommendations
+
+```bash
+kcap recommend -n <namespace> [--json] [--threshold <waste_percentage>]
 ```
 
-Concepts 🧠
-Concept              |  Explanation           
----------------------+------------------------
-CPUm(millicores)     |  1000m = 1 CPU core    
-MemoryMi(Mebibytes)  |  1 Mi = 1,048,576 bytes
+*Default threshold: 80%*
 
-Resource requests must be set in pod specs to avoid zero request readings.
+### Report
 
-Recommendations are based on recent Metrics Server data (~1-minute average).
-
-Right-sizing suggestions apply a configurable buffer (default 30-70%) above current usage.
-
-Limitations ⚠️
-Metrics come from Metrics Server, representing short-term usage snapshots.
-
-Usage spikes outside the sampling window may not be captured.
-
-Recommendations are guidelines and should be validated with longer-term monitoring.
-
-DaemonSet pods are excluded from pod and deployment analysis to reduce noise.
-
-Best Practices ✅
-Always set resource requests and limits on your pods for effective scheduling and resource management.
-
-Use kcap recommendations as part of a broader capacity planning and cost optimization strategy.
-
-Combine with Prometheus or other monitoring solutions for historical usage insights.
-
-
-Example 💡
-Run recommendations with an 80% waste threshold:
+```bash
+kcap report -n <namespace> [--json] [--threshold <waste_percentage>]
 ```
+
+---
+
+## Concepts
+
+| Concept  | Explanation            |
+| -------- | ---------------------- |
+| CPUm     | 1000m = 1 CPU core     |
+| MemoryMi | 1 Mi = 1,048,576 bytes |
+
+> Resource requests must be set in pod specs. Recommendations are based on ~1-min Metrics Server snapshots.
+
+---
+
+## Limitations
+
+* Short-term usage snapshots
+* Usage spikes outside sampling window may be missed
+* Recommendations are **guidelines**, validate with long-term monitoring
+
+---
+
+## Best Practices
+
+* Set resource requests and limits on pods
+* Use alongside Prometheus or other monitoring tools for historical insights
+
+---
+
+## Example
+
+```bash
 kcap recommend -n default --threshold 80
 ```
 
-Sample output:
+**Output Sample:**
 
-TYPE                |  DETAILS             |  SUGGESTION                 
---------------------+----------------------+-----------------------------
-Scale-in candidate  |  ip-10-50-8-114.ec2  |  Consider draining this node
-Right-size pod      |  default/myapp-1     |  Reduce CPU request         
-Right-size pod      |  default/myapp-1     |  Reduce Memory request      
-
+| TYPE               | DETAILS            | SUGGESTION                  |
+| ------------------ | ------------------ | --------------------------- |
+| Scale-in candidate | ip-10-50-8-114.ec2 | Consider draining this node |
+| Right-size pod     | default/myapp-1    | Reduce CPU request          |
+| Right-size pod     | default/myapp-1    | Reduce Memory request       |
