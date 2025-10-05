@@ -143,10 +143,4 @@ We welcome contributions!
 
 ---
 
-## 📜 License
-
-Released under the [MIT License](LICENSE).
-
----
-
 ⭐ **If you find `kcap` useful, give it a star on [GitHub](https://github.com/Mayank12agrawal/kcap)!**
