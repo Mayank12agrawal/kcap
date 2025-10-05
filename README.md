@@ -121,3 +121,8 @@ kcap recommend -n default --threshold 80
 * 📊 Use `--json` output for custom dashboards
 * 🎯 Filter by namespace for focused analysis
 * 🧪 Always validate changes in staging before production
+
+## Feedback & Contributing 🤝
+
+Have an idea, found a bug, or want to contribute?  
+Open an [issue](https://github.com/Mayank12agrawal/kcap/issues) or [pull request](https://github.com/Mayank12agrawal/kcap/pulls) on the repository.
