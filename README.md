@@ -1,7 +1,7 @@
-kcap - Kubernetes Capacity and Resource Analyzer
+kcap - Kubernetes Capacity and Resource Analyzer 🚀
 kcap is a command-line tool designed to analyze Kubernetes cluster resource utilization in real-time, providing insights and actionable recommendations for CPU and memory right-sizing at node, pod, and deployment levels.
 
-Features
+Features ⚙️
 Node summary: Displays allocatable, requested, and usage metrics of cluster nodes with health status and scale-in candidate identification.
 
 Pod summary: Shows pod-level CPU and memory requests vs usage, including waste percentages.
@@ -12,17 +12,19 @@ Resource recommendations: Suggests nodes to drain (scale-in candidates) and pods
 
 JSON output: Machine-readable output for integration into automation pipelines.
 
-namespace filtering with shorthand -n flag similar to kubectl.
+Namespace filtering with shorthand -n flag similar to kubectl.
 
 Ignores DaemonSet pods by default to focus on user workloads.
 
-Installation
+Installation 🛠️
 Build from source:
 ```
 go build -o kcap
 ```
+
 Ensure you have a working Kubernetes cluster with Metrics Server installed.
-Usage
+
+Usage 📋
 Use --help for detailed flags for each command.
 
 Nodes
@@ -37,6 +39,7 @@ Show pod CPU/memory requests vs usage with waste %:
 ```
 kcap pods -n <namespace> [--kubeconfig <path>] [--json]
 ```
+
 Deployments
 Aggregated deployment resource usage and waste summary:
 ```
@@ -54,10 +57,12 @@ Comprehensive cluster or namespace-level summary report:
 ```
 kcap report -n <namespace> [--kubeconfig <path>] [--json] [--threshold <waste_percentage>]
 ```
-Concepts
-CPU m (millicores): 1000m = 1 CPU core.
 
-Memory Mi (Mebibytes): 1 Mi = 1,048,576 bytes.
+Concepts 🧠
+Concept              |  Explanation           
+---------------------+------------------------
+CPUm(millicores)     |  1000m = 1 CPU core    
+MemoryMi(Mebibytes)  |  1 Mi = 1,048,576 bytes
 
 Resource requests must be set in pod specs to avoid zero request readings.
 
@@ -65,7 +70,7 @@ Recommendations are based on recent Metrics Server data (~1-minute average).
 
 Right-sizing suggestions apply a configurable buffer (default 30-70%) above current usage.
 
-Limitations
+Limitations ⚠️
 Metrics come from Metrics Server, representing short-term usage snapshots.
 
 Usage spikes outside the sampling window may not be captured.
@@ -74,18 +79,22 @@ Recommendations are guidelines and should be validated with longer-term monitori
 
 DaemonSet pods are excluded from pod and deployment analysis to reduce noise.
 
-Best Practices
+Best Practices ✅
 Always set resource requests and limits on your pods for effective scheduling and resource management.
 
 Use kcap recommendations as part of a broader capacity planning and cost optimization strategy.
 
 Combine with Prometheus or other monitoring solutions for historical usage insights.
 
-Example
+
+Example 💡
+Run recommendations with an 80% waste threshold:
 ```
 kcap recommend -n default --threshold 80
 ```
-Produces output like:
+
+Sample output:
+
 TYPE                |  DETAILS             |  SUGGESTION                 
 --------------------+----------------------+-----------------------------
 Scale-in candidate  |  ip-10-50-8-114.ec2  |  Consider draining this node
