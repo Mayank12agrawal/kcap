@@ -25,7 +25,8 @@ fi
 CLEAN_VERSION="${VERSION#v}"
 
 # Construct the tarball name matching your release assets
-TARBALL="${BINARY}_v${CLEAN_VERSION}_${OS}_${ARCH}.tar.gz"
+# Change this line in install.sh:
+TARBALL="${BINARY}_vv${CLEAN_VERSION}_${OS}_${ARCH}.tar.gz"
 URL="https://github.com/${REPO}/releases/download/${VERSION}/${TARBALL}"
 
 echo "📥 Checking if asset $TARBALL exists at $URL..."
