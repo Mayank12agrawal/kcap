@@ -19,6 +19,14 @@
 
 ## Installation 🛠️
 
+### 📦 One-line Install
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Mayank12agrawal/kcap/main/install.sh | sh
+```
+
+### 🧰 Build from Source
+
 ```bash
 go build -o kcap
 ```
@@ -109,7 +117,7 @@ kcap recommend -n default --threshold 80
 
 ## Additional Tips ✨
 
-* Combine kcap with CI/CD pipelines for automated alerts
-* Use `--json` output for custom dashboards
-* Filter by namespace for focused analysis
-* Always validate changes in staging before production
+* 🤖 Combine kcap with CI/CD pipelines for automated alerts
+* 📊 Use `--json` output for custom dashboards
+* 🎯 Filter by namespace for focused analysis
+* 🧪 Always validate changes in staging before production
