@@ -115,7 +115,11 @@ func NodeStats(nodes []v1.Node, nodeMetrics map[string]v1.ResourceList, pods []v
 
         if readyCondition != nil && readyCondition.Status == v1.ConditionTrue {
             if cpuUsagePercent < CPUScaleInThresholdPercent && memUsagePercent < MemScaleInThresholdPercent {
-                status = "Scale-in candidate"
+                if len(nodes) == 1 {
+                    status = "Downsize candidate"
+                } else {
+                    status = "Scale-in candidate"
+                }
             } else {
                 status = "Healthy"
             }
@@ -260,6 +264,13 @@ func RecommendNodes(nodes []NodeStat) []Recommendation {
                 Suggestion: "Consider draining this node",
                 Severity:   "Medium",
             })
+        case "Downsize candidate":
+            recs = append(recs, Recommendation{
+                Type:       "Downsize candidate",
+                Details:    n.Name,
+                Suggestion: "Replace the node with a smaller instance type",
+                Severity:   "Medium",
+            })
         case "NotReady":
             recs = append(recs, Recommendation{
                 Type:       "Node",
@@ -300,5 +311,3 @@ func RecommendPods(pods []PodRecord, threshold float64) []Recommendation {
     }
     return recs
 }
-
-
