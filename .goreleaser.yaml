@@ -1,0 +1,28 @@
+project_name: kcap
+
+builds:
+  - id: kcap
+    main: ./main.go
+    binary: kcap
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+      - 386
+
+archives:
+  - format: tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    files:
+      - LICENSE
+      - README.md
+
+checksum:
+  name_template: "checksums.txt"
+
+release:
+  github:
+    owner: Mayank12agrawal
+    name: kcap
