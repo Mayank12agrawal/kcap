@@ -1,10 +1,18 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Version logic: positional argument > environment variable > default 'v1.0.0'
-VERSION="${1:-v1.0.0}"
+# Repository and binary
 REPO="Mayank12agrawal/kcap"
 BINARY="kcap"
+
+# Get version: argument > latest GitHub release
+if [ $# -ge 1 ]; then
+  VERSION="$1"
+else
+  VERSION=$(curl -s https://api.github.com/repos/${REPO}/releases/latest | sed -n 's/.*"tag_name": "\([^"]*\)".*/\1/p')
+fi
+
+echo "ℹ️ Installing $BINARY version: $VERSION"
 
 # Detect OS and normalize architecture names
 OS=$(uname | tr '[:upper:]' '[:lower:]')
@@ -21,12 +29,12 @@ else
   exit 1
 fi
 
-# Remove leading 'v' from version for the tarball name
+# Remove leading 'v' from version for tarball naming
 CLEAN_VERSION="${VERSION#v}"
 
-# Construct the tarball name matching your release assets
-# Change this line in install.sh:
-TARBALL="${BINARY}_vv${CLEAN_VERSION}_${OS}_${ARCH}.tar.gz"
+# Construct tarball URL
+# Correct (matches your release assets)
+TARBALL="${BINARY}_${CLEAN_VERSION}_${OS}_${ARCH}.tar.gz"
 URL="https://github.com/${REPO}/releases/download/${VERSION}/${TARBALL}"
 
 echo "📥 Checking if asset $TARBALL exists at $URL..."
@@ -34,7 +42,7 @@ echo "📥 Checking if asset $TARBALL exists at $URL..."
 if ! curl -fsI "$URL" > /dev/null; then
   echo "❌ Release asset not found:"
   echo "   $URL"
-  echo "❓ Please verify the release exists and the asset is uploaded exactly with this name."
+  echo "❓ Please verify the release exists and the asset is uploaded with this name."
   exit 1
 fi
 
