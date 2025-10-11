@@ -27,7 +27,7 @@
 
 Run this one-liner to install the latest release:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Mayank12agrawal/kcap/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/Mayank12agrawal/kcap/main/install.sh | bash
 ```
 
 ### 🛠️ Build from Source
